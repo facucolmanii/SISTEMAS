@@ -53,6 +53,8 @@ SISTEMAS/
 - Sidebar colapsable en móvil y diseño responsive.
 - Modo oscuro con persistencia en `localStorage`.
 - Dashboard con gráficos de ventas usando Chart.js.
+- Loader inicial elegante, toasts de éxito/error y microinteracciones avanzadas.
+- Formularios con estilo moderno y etiquetas flotantes.
 
 ## Módulos funcionales
 

@@ -1,5 +1,8 @@
 // Sidebar móvil, filtros y paginación simple para tablas.
 document.addEventListener('DOMContentLoaded', () => {
+  const loader = document.getElementById('appLoader');
+  setTimeout(() => loader?.classList.add('hide'), 350);
+
   const root = document.documentElement;
   const themeToggle = document.getElementById('themeToggle');
   const storedTheme = localStorage.getItem('crm_theme') || 'light';
@@ -22,6 +25,38 @@ document.addEventListener('DOMContentLoaded', () => {
   const sidebar = document.getElementById('sidebar');
 
   toggle?.addEventListener('click', () => sidebar?.classList.toggle('open'));
+
+  // Navegación con transición suave entre páginas.
+  document.querySelectorAll('a[href$=".php"]').forEach((link) => {
+    link.addEventListener('click', (e) => {
+      const href = link.getAttribute('href');
+      if (!href || href.startsWith('#') || e.metaKey || e.ctrlKey) return;
+      e.preventDefault();
+      document.body.style.opacity = '0.96';
+      document.body.style.transform = 'translateY(2px)';
+      setTimeout(() => { window.location.href = href; }, 120);
+    });
+  });
+
+  // Convierte alertas clásicas en toasts modernos.
+  const alerts = document.querySelectorAll('.alert');
+  if (alerts.length > 0) {
+    const wrap = document.createElement('div');
+    wrap.className = 'toast-wrap';
+    document.body.appendChild(wrap);
+    alerts.forEach((alertEl, idx) => {
+      const toast = document.createElement('div');
+      toast.className = `toast ${alertEl.classList.contains('error') ? 'error' : 'success'}`;
+      toast.textContent = alertEl.textContent.trim();
+      wrap.appendChild(toast);
+      alertEl.remove();
+      setTimeout(() => {
+        toast.style.opacity = '0';
+        toast.style.transform = 'translateX(10px)';
+        setTimeout(() => toast.remove(), 280);
+      }, 2600 + idx * 350);
+    });
+  }
 
   document.querySelectorAll('[data-table]').forEach((tableWrap) => {
     const table = tableWrap.querySelector('table');

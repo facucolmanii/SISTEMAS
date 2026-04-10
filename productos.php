@@ -74,6 +74,7 @@ $resultadoProductos = $conn->query('SELECT * FROM productos ORDER BY id DESC');
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 </head>
 <body>
+<div class="app-loader" id="appLoader"><div class="loader-dot"></div></div>
 <div class="app">
   <aside class="sidebar" id="sidebar">
     <div class="brand"><i class="fa-solid fa-sparkles"></i> AutoLimpio CRM</div>
@@ -102,10 +103,10 @@ $resultadoProductos = $conn->query('SELECT * FROM productos ORDER BY id DESC');
         <h2><?= $productoEditar ? 'Editar producto' : 'Nuevo producto' ?></h2>
         <form method="POST" class="form-grid" novalidate>
           <?php if ($productoEditar): ?><input type="hidden" name="id" value="<?= (int)$productoEditar['id'] ?>"><?php endif; ?>
-          <label>Nombre<input type="text" name="nombre" required value="<?= htmlspecialchars($productoEditar['nombre'] ?? '') ?>"></label>
-          <label>Precio compra<input type="number" step="0.01" min="0" name="precio_compra" required value="<?= htmlspecialchars($productoEditar['precio_compra'] ?? '') ?>"></label>
-          <label>Precio venta<input type="number" step="0.01" min="0" name="precio_venta" required value="<?= htmlspecialchars($productoEditar['precio_venta'] ?? '') ?>"></label>
-          <label>Stock<input type="number" min="0" name="stock" required value="<?= htmlspecialchars($productoEditar['stock'] ?? '') ?>"></label>
+          <div class="field"><input placeholder=" " type="text" name="nombre" required value="<?= htmlspecialchars($productoEditar['nombre'] ?? '') ?>"><label>Nombre</label></div>
+          <div class="field"><input placeholder=" " type="number" step="0.01" min="0" name="precio_compra" required value="<?= htmlspecialchars($productoEditar['precio_compra'] ?? '') ?>"><label>Precio compra</label></div>
+          <div class="field"><input placeholder=" " type="number" step="0.01" min="0" name="precio_venta" required value="<?= htmlspecialchars($productoEditar['precio_venta'] ?? '') ?>"><label>Precio venta</label></div>
+          <div class="field"><input placeholder=" " type="number" min="0" name="stock" required value="<?= htmlspecialchars($productoEditar['stock'] ?? '') ?>"><label>Stock</label></div>
           <div class="actions">
             <?php if ($productoEditar): ?>
               <button class="btn big" type="submit" name="editar"><i class="fa-solid fa-floppy-disk"></i> Guardar cambios</button>
@@ -134,7 +135,15 @@ $resultadoProductos = $conn->query('SELECT * FROM productos ORDER BY id DESC');
                 <td><?= htmlspecialchars($producto['nombre']) ?></td>
                 <td>$<?= number_format((float)$producto['precio_compra'], 2) ?></td>
                 <td>$<?= number_format((float)$producto['precio_venta'], 2) ?></td>
-                <td><?= (int)$producto['stock'] ?></td>
+                <td>
+                  <?php if ((int)$producto['stock'] <= 5): ?>
+                    <span class="badge danger"><?= (int)$producto['stock'] ?></span>
+                  <?php elseif ((int)$producto['stock'] <= 10): ?>
+                    <span class="badge warn"><?= (int)$producto['stock'] ?></span>
+                  <?php else: ?>
+                    <span class="badge ok"><?= (int)$producto['stock'] ?></span>
+                  <?php endif; ?>
+                </td>
                 <td class="inline-buttons">
                   <a class="btn" href="productos.php?editar=<?= (int)$producto['id'] ?>"><i class="fa-solid fa-pen"></i> Editar</a>
                   <a class="btn danger" href="productos.php?eliminar=<?= (int)$producto['id'] ?>" onclick="return confirm('¿Eliminar producto?');"><i class="fa-solid fa-trash"></i> Eliminar</a>
