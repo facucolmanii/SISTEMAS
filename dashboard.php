@@ -5,6 +5,34 @@ $totalIngresos = $conn->query("SELECT COALESCE(SUM(total), 0) AS total FROM vent
 $stockBajo = $conn->query("SELECT id, nombre, stock FROM productos WHERE stock <= 5 ORDER BY stock ASC");
 $productosBajo = [];
 while ($row = $stockBajo->fetch_assoc()) { $productosBajo[] = $row; }
+
+$labelsDias = [];
+$totalesDias = [];
+for ($i = 6; $i >= 0; $i--) {
+  $fecha = date('Y-m-d', strtotime("-$i days"));
+  $stmt = $conn->prepare("SELECT COALESCE(SUM(total),0) AS total FROM ventas WHERE DATE(fecha) = ?");
+  $stmt->bind_param('s', $fecha);
+  $stmt->execute();
+  $totalDia = $stmt->get_result()->fetch_assoc()['total'] ?? 0;
+  $stmt->close();
+  $labelsDias[] = date('d/m', strtotime($fecha));
+  $totalesDias[] = (float)$totalDia;
+}
+
+$topProductos = $conn->query("
+  SELECT p.nombre, COALESCE(SUM(d.cantidad),0) AS unidades
+  FROM productos p
+  LEFT JOIN detalle_ventas d ON d.producto_id = p.id
+  GROUP BY p.id, p.nombre
+  ORDER BY unidades DESC
+  LIMIT 5
+");
+$labelsTop = [];
+$dataTop = [];
+while ($tp = $topProductos->fetch_assoc()) {
+  $labelsTop[] = $tp['nombre'];
+  $dataTop[] = (int)$tp['unidades'];
+}
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -30,7 +58,10 @@ while ($row = $stockBajo->fetch_assoc()) { $productosBajo[] = $row; }
     <header class="topbar container">
       <button class="sidebar-toggle" id="sidebarToggle"><i class="fa-solid fa-bars"></i></button>
       <div><h1>Dashboard</h1><p>Resumen operativo del negocio</p></div>
-      <span class="user-pill"><i class="fa-solid fa-user"></i> Admin</span>
+      <div class="inline-buttons">
+        <button id="themeToggle" class="btn outline" type="button"><i class="fa-solid fa-moon"></i> Oscuro</button>
+        <span class="user-pill"><i class="fa-solid fa-user"></i> Admin</span>
+      </div>
     </header>
 
     <main class="container">
@@ -68,9 +99,61 @@ while ($row = $stockBajo->fetch_assoc()) { $productosBajo[] = $row; }
           </ul>
         <?php endif; ?>
       </section>
+
+      <section class="chart-grid">
+        <article class="card chart-card">
+          <h2><i class="fa-solid fa-chart-line"></i> Ventas últimos 7 días</h2>
+          <canvas id="ventasSemanaChart"></canvas>
+        </article>
+
+        <article class="card chart-card">
+          <h2><i class="fa-solid fa-ranking-star"></i> Productos más vendidos</h2>
+          <canvas id="topProductosChart"></canvas>
+          <div class="kpi-row" style="margin-top:.8rem;">
+            <div class="mini-stat"><strong>Ticket promedio:</strong> $<?= number_format((float)($totalIngresos / max(1, $conn->query("SELECT COUNT(*) as c FROM ventas")->fetch_assoc()['c'] ?? 1)), 2) ?></div>
+            <div class="mini-stat"><strong>Ventas registradas:</strong> <?= (int)($conn->query("SELECT COUNT(*) as c FROM ventas")->fetch_assoc()['c'] ?? 0) ?></div>
+          </div>
+        </article>
+      </section>
     </main>
   </div>
 </div>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+const labelsDias = <?= json_encode($labelsDias) ?>;
+const totalesDias = <?= json_encode($totalesDias) ?>;
+const labelsTop = <?= json_encode($labelsTop) ?>;
+const dataTop = <?= json_encode($dataTop) ?>;
+
+new Chart(document.getElementById('ventasSemanaChart'), {
+  type: 'line',
+  data: {
+    labels: labelsDias,
+    datasets: [{
+      label: 'Ventas ($)',
+      data: totalesDias,
+      borderColor: '#2563eb',
+      backgroundColor: 'rgba(37,99,235,0.2)',
+      tension: 0.35,
+      fill: true
+    }]
+  },
+  options: { responsive: true, maintainAspectRatio: false }
+});
+
+new Chart(document.getElementById('topProductosChart'), {
+  type: 'bar',
+  data: {
+    labels: labelsTop,
+    datasets: [{
+      label: 'Unidades',
+      data: dataTop,
+      backgroundColor: ['#60a5fa', '#34d399', '#f59e0b', '#a78bfa', '#f472b6']
+    }]
+  },
+  options: { responsive: true, maintainAspectRatio: false, indexAxis: 'y' }
+});
+</script>
 <script src="ui.js"></script>
 </body>
 </html>

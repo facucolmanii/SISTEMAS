@@ -26,7 +26,10 @@
         <h1>Panel principal</h1>
         <p>Sistema de ventas para taller de limpieza automotriz</p>
       </div>
-      <span class="user-pill"><i class="fa-solid fa-user"></i> Admin</span>
+      <div class="inline-buttons">
+        <button id="themeToggle" class="btn outline" type="button"><i class="fa-solid fa-moon"></i> Oscuro</button>
+        <span class="user-pill"><i class="fa-solid fa-user"></i> Admin</span>
+      </div>
     </header>
 
     <main class="container">

@@ -1,5 +1,23 @@
 // Sidebar móvil, filtros y paginación simple para tablas.
 document.addEventListener('DOMContentLoaded', () => {
+  const root = document.documentElement;
+  const themeToggle = document.getElementById('themeToggle');
+  const storedTheme = localStorage.getItem('crm_theme') || 'light';
+  root.setAttribute('data-theme', storedTheme);
+  if (themeToggle) {
+    themeToggle.innerHTML = storedTheme === 'dark'
+      ? '<i class="fa-solid fa-sun"></i> Claro'
+      : '<i class="fa-solid fa-moon"></i> Oscuro';
+    themeToggle.addEventListener('click', () => {
+      const current = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+      root.setAttribute('data-theme', current);
+      localStorage.setItem('crm_theme', current);
+      themeToggle.innerHTML = current === 'dark'
+        ? '<i class="fa-solid fa-sun"></i> Claro'
+        : '<i class="fa-solid fa-moon"></i> Oscuro';
+    });
+  }
+
   const toggle = document.getElementById('sidebarToggle');
   const sidebar = document.getElementById('sidebar');
 

@@ -34,7 +34,10 @@ $ventas = $conn->query("SELECT id, fecha, total FROM ventas WHERE $filtroSQL ORD
     <header class="topbar container">
       <button class="sidebar-toggle" id="sidebarToggle"><i class="fa-solid fa-bars"></i></button>
       <div><h1>Reportes de ventas</h1><p>Analiza resultados por periodo</p></div>
-      <span class="user-pill"><i class="fa-solid fa-user"></i> Admin</span>
+      <div class="inline-buttons">
+        <button id="themeToggle" class="btn outline" type="button"><i class="fa-solid fa-moon"></i> Oscuro</button>
+        <span class="user-pill"><i class="fa-solid fa-user"></i> Admin</span>
+      </div>
     </header>
 
     <main class="container">

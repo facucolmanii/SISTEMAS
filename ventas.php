@@ -26,7 +26,10 @@ $productos = $conn->query('SELECT id, nombre, precio_venta, stock FROM productos
     <header class="topbar container">
       <button class="sidebar-toggle" id="sidebarToggle"><i class="fa-solid fa-bars"></i></button>
       <div><h1>Nueva venta</h1><p>Registra ventas con cálculo automático</p></div>
-      <span class="user-pill"><i class="fa-solid fa-user"></i> Admin</span>
+      <div class="inline-buttons">
+        <button id="themeToggle" class="btn outline" type="button"><i class="fa-solid fa-moon"></i> Oscuro</button>
+        <span class="user-pill"><i class="fa-solid fa-user"></i> Admin</span>
+      </div>
     </header>
 
     <main class="container">

@@ -51,6 +51,8 @@ SISTEMAS/
 - Iconografía con Font Awesome.
 - Tablas modernas con búsqueda en tiempo real y paginación simple (`ui.js`).
 - Sidebar colapsable en móvil y diseño responsive.
+- Modo oscuro con persistencia en `localStorage`.
+- Dashboard con gráficos de ventas usando Chart.js.
 
 ## Módulos funcionales
 
