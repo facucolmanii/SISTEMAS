@@ -1,6 +1,6 @@
 # Sistema Web de Ventas - Taller de Limpieza de Autos
 
-Aplicación web en **PHP puro + MySQL** para gestión de productos, ventas, reportes, caja y dashboard.
+Aplicación web en **PHP puro + MySQL** para gestión de productos, ventas, reportes, caja y dashboard, con interfaz moderna tipo CRM/SaaS.
 
 ## Estructura de carpetas
 
@@ -15,6 +15,7 @@ SISTEMAS/
 ├── productos.php
 ├── reportes.php
 ├── styles.css
+├── ui.js
 └── ventas.php
 ```
 
@@ -29,8 +30,7 @@ SISTEMAS/
 
 3. **Crear la base de datos**
    - Entra a `http://localhost/phpmyadmin`.
-   - Crea una base de datos o importa directamente el archivo `database.sql`.
-   - Si importas `database.sql`, se creará automáticamente `taller_ventas_limpieza` y sus tablas.
+   - Importa el archivo `database.sql`.
 
 4. **Verificar conexión**
    - Abre `conexion.php` y valida credenciales:
@@ -42,34 +42,25 @@ SISTEMAS/
 5. **Ejecutar sistema**
    - Abre en navegador: `http://localhost/SISTEMAS/index.php`
 
-## Módulos incluidos
+## Mejoras de UI/UX incluidas
 
-- **Productos (`productos.php`)**
-  - CRUD completo: crear, editar, eliminar.
-  - Campos: nombre, precio_compra, precio_venta, stock.
+- Sidebar lateral y header superior tipo dashboard profesional.
+- Tipografía moderna (Inter), paleta suave y espaciado consistente.
+- Cards con sombras suaves y animación de entrada.
+- Botones modernos grandes y formularios visualmente mejorados.
+- Iconografía con Font Awesome.
+- Tablas modernas con búsqueda en tiempo real y paginación simple (`ui.js`).
+- Sidebar colapsable en móvil y diseño responsive.
 
-- **Ventas (`ventas.php` + `guardar_venta.php`)**
-  - Agregar múltiples productos con cantidad.
-  - Cálculo automático de subtotal y total.
-  - Guarda cabecera y detalle de venta.
-  - Descuenta stock automáticamente.
+## Módulos funcionales
 
-- **Reportes (`reportes.php`)**
-  - Vista por día, semana o mes.
-  - Total vendido por periodo.
-  - Listado de ventas.
-
-- **Caja y Dashboard (`dashboard.php`)**
-  - Caja diaria = ventas del día.
-  - Resumen de ventas del día, stock bajo y total ingresos.
+- **Productos:** CRUD completo.
+- **Ventas:** selección múltiple, cálculo automático, guardado con detalle y descuento de stock.
+- **Reportes:** día/semana/mes, total vendido y listado.
+- **Dashboard:** ventas del día, total ingresos y stock bajo.
 
 ## Validaciones básicas
 
-- Validación de campos obligatorios y valores no negativos.
-- Verificación de stock antes de registrar una venta.
-- Transacciones en `guardar_venta.php` para mantener consistencia de datos.
-
-## Notas
-
-- Diseño responsive con botones grandes para uso en celular.
-- Código comentado y estructura simple para facilitar mantenimiento.
+- Campos obligatorios y valores no negativos.
+- Verificación de stock antes de registrar venta.
+- Transacciones en `guardar_venta.php` para consistencia de datos.
