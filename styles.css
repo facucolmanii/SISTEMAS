@@ -20,7 +20,10 @@
 body {
   margin: 0;
   font-family: 'Inter', sans-serif;
-  background: var(--bg);
+  background:
+    radial-gradient(circle at 10% 10%, #dbeafe 0, transparent 25%),
+    radial-gradient(circle at 90% 0%, #e0e7ff 0, transparent 30%),
+    var(--bg);
   color: var(--text);
 }
 
@@ -106,6 +109,12 @@ body {
   padding: 1rem;
   margin-bottom: 1rem;
   animation: reveal .45s ease both;
+  transition: transform .2s ease, box-shadow .2s ease;
+}
+
+.card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 14px 35px rgba(15, 23, 42, 0.1);
 }
 
 @keyframes reveal {
@@ -142,6 +151,38 @@ body {
   color: var(--primary);
 }
 
+.kpi {
+  position: relative;
+  overflow: hidden;
+}
+
+.kpi::after {
+  content: '';
+  position: absolute;
+  inset: auto -30px -30px auto;
+  width: 110px;
+  height: 110px;
+  border-radius: 50%;
+  opacity: .25;
+}
+
+.kpi.sales {
+  background: linear-gradient(135deg, #eff6ff, #ffffff 55%);
+}
+.kpi.sales::after { background: #60a5fa; }
+
+.kpi.income {
+  background: linear-gradient(135deg, #ecfdf5, #ffffff 55%);
+}
+.kpi.income .icon-wrap { background: #d1fae5; color: #047857; }
+.kpi.income::after { background: #34d399; }
+
+.kpi.stock {
+  background: linear-gradient(135deg, #fff7ed, #ffffff 55%);
+}
+.kpi.stock .icon-wrap { background: #ffedd5; color: #c2410c; }
+.kpi.stock::after { background: #fb923c; }
+
 .btn {
   display: inline-flex;
   gap: .5rem;
@@ -159,6 +200,7 @@ body {
 }
 
 .btn:hover { transform: translateY(-1px); background: var(--primary-600); }
+.btn:active { transform: scale(.98); }
 .btn.big { padding: .9rem 1.1rem; font-size: 1rem; }
 .btn.secondary { background: #475569; }
 .btn.danger { background: var(--danger); }

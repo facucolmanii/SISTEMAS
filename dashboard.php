@@ -34,16 +34,21 @@ while ($row = $stockBajo->fetch_assoc()) { $productosBajo[] = $row; }
     </header>
 
     <main class="container">
+      <section class="card">
+        <h2><i class="fa-solid fa-wave-square"></i> Estado general</h2>
+        <p style="color:#64748b;margin-top:0;">Vista rápida de métricas clave del negocio en tiempo real.</p>
+      </section>
+
       <section class="stats-grid">
-        <article class="card">
+        <article class="card kpi sales">
           <div class="stat-head"><span>Ventas del día</span><span class="icon-wrap"><i class="fa-solid fa-bolt"></i></span></div>
           <p class="stat-value">$<?= number_format((float)$ventasDia, 2) ?></p>
         </article>
-        <article class="card">
+        <article class="card kpi income">
           <div class="stat-head"><span>Total ingresos</span><span class="icon-wrap"><i class="fa-solid fa-wallet"></i></span></div>
           <p class="stat-value">$<?= number_format((float)$totalIngresos, 2) ?></p>
         </article>
-        <article class="card">
+        <article class="card kpi stock">
           <div class="stat-head"><span>Productos stock bajo</span><span class="icon-wrap"><i class="fa-solid fa-triangle-exclamation"></i></span></div>
           <p class="stat-value"><?= count($productosBajo) ?></p>
         </article>
